@@ -19,7 +19,7 @@
 			</dd>
 			<!--{if $_GET[action] == 'newthread'}-->
 			<dt><label for="activitycity">{lang activity_city}:</label></dt>
-			<dd><input name="activitycity" id="activitycity" class="px" type="text" tabindex="1" /></dd>
+			<dd><input name="activitycity" id="activitycity" class="px" type="text" tabindex="1" {if $activity['city']}value="$activity['city']"{/if} /></dd>
 			<!--{/if}-->
 			<dt><span class="rq">*</span><label for="activityclass">{lang activiy_sort}:</label></dt>
 			<dd class="hasd cl">

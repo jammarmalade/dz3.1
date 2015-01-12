@@ -41,7 +41,21 @@ class extend_thread_activity extends extend_thread_base {
 		$this->activity['cost'] = intval($_GET['cost']);
 		$this->activity['gender'] = intval($_GET['gender']);
 		$this->activity['number'] = intval($_GET['activitynumber']);
-
+		//经纬度
+		$this->activity['lng']=$this->activity['lat']=$this->activity['sinlat']=$this->activity['coslat']=$this->activity['lngpi']=0;
+		$ak='lz3rVG3ds7rfYkTSbQbAHuKH';
+		$address=trim($_GET['activitycity']).$this->activity['place'];
+		$pre_url='http://api.map.baidu.com/geocoder/v2/?address='.$address.'&output=json&ak='.$ak;
+		$res=json_decode(myCurl($pre_url),true);
+		if($res['status']==0){
+			$this->activity['lng'] = $res['result']['location']['lng'];
+			$this->activity['lat'] = $res['result']['location']['lat'];
+			//空间换时间（数据库要存入这三个值）
+			$this->activity['sinlat']=sin(($this->activity['lat'] * 3.1415) / 180);
+			$this->activity['coslat']=cos(($this->activity['lat'] * 3.1415) / 180);
+			$this->activity['lngpi']=($this->activity['lng'] * 3.1415) / 180;
+		}
+		//经纬度
 		if($_GET['activityexpiration']) {
 			$this->activity['expiration'] = @strtotime($_GET['activityexpiration']);
 		} else {
@@ -72,7 +86,7 @@ class extend_thread_activity extends extend_thread_base {
 
 	public function after_newthread() {
 		if($this->group['allowpostactivity']) {
-			$data = array('tid' => $this->tid, 'uid' => $this->member['uid'], 'cost' => $this->activity['cost'], 'starttimefrom' => $this->activity['starttimefrom'], 'starttimeto' => $this->activity['starttimeto'], 'place' => $this->activity['place'], 'class' => $this->activity['class'], 'gender' => $this->activity['gender'], 'number' => $this->activity['number'], 'expiration' => $this->activity['expiration'], 'aid' => $_GET['activityaid'], 'ufield' => $this->activity['ufield'], 'credit' => $this->activity['credit']);
+			$data = array('tid' => $this->tid, 'uid' => $this->member['uid'], 'cost' => $this->activity['cost'], 'starttimefrom' => $this->activity['starttimefrom'], 'starttimeto' => $this->activity['starttimeto'], 'place' => $this->activity['place'], 'class' => $this->activity['class'], 'gender' => $this->activity['gender'], 'number' => $this->activity['number'], 'expiration' => $this->activity['expiration'], 'aid' => $_GET['activityaid'], 'ufield' => $this->activity['ufield'], 'credit' => $this->activity['credit'],'lng' => $this->activity['lng'],'lat' => $this->activity['lat'],'sinlat' => $this->activity['sinlat'],'coslat' => $this->activity['coslat'],'lngpi' => $this->activity['lngpi']);
 			C::t('forum_activity')->insert($data);
 		}
 	}

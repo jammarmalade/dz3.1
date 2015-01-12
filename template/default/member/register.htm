@@ -80,6 +80,33 @@
 								}
 							</script>
 						</div>
+					<!--{elseif $sendauthcode}-->
+						<div class="rfm">
+							<table>
+								<tr>
+									<th><span class="rq">*</span><label for="phone">{lang phone}:</label></th>
+									<td>
+										<input type="text" id="phone" name="phone" autocomplete="off" size="25" tabindex="1" class="px" required />
+										<a href="javascript:;" onclick="sendauthorcode();">{lang send}</a><input type="hidden" name="handlekey" value="sendauthcode"/>
+									</td>
+									<td class="tipcol"><i id="tip_phone" class="p_tip">{lang register_phone_tips}</i><kbd id="chk_phone" class="p_chk"></kbd></td>
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<th><span class="rq">*</span><label for="authcode">{lang authcode}:</label></th>
+									<td>
+										<input type="text" id="authcode" name="authcode" autocomplete="off" size="10" tabindex="1" class="px" style="width:80px;height:20px;letter-spacing:2px;" required />
+									</td>
+									<td class="tipcol"><i id="tip_authcode" class="p_tip"></i><kbd id="chk_authcode" class="p_chk"></kbd></td>
+								</tr>
+							</table>
+							<script type="text/javascript">
+								function succeedhandle_sendauthcode(url, msg, values) {
+									showDialog(msg, 'notice');
+								}
+							</script>
+						</div>
 					<!--{else}-->
 						<!--{if $invite}-->
 							<!--{if $invite['uid']}-->

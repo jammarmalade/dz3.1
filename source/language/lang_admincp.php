@@ -808,10 +808,18 @@ $lang = array
 	'setting_access_register_connect' => '开放QQ注册',
 	'setting_access_register_send_register_url' => '通过邮件发送注册链接',
 	'setting_access_register_send_register_url_comment' => '开启后系统会发一条注册的地址到用户的邮箱，从该地址链接过来的允许注册，同时建议UCenter中开启一个邮箱只允许注册一个帐户<br/>注意：只有在<a href="?action=setting&operation=mail">站长 - 邮件设置</a>中完成邮件设置，确保邮件能发送成功下可以开启该功能 ',
+	//phone register
+	'setting_access_register_send_phoneauthcode' => '手机注册',
+	'setting_access_register_send_phoneauthcode_comment' => '开启后，手机号必填，将以短信验证码的方式发送到用户手机进行验证',
+	'setting_access_register_send_phoneauthcode_user' => '短信服务商的用户名',
+	'setting_access_register_send_phoneauthcode_user_comment' => '<font color="red">注意:每个短信服务商的接口都不一样，若是换了短信服务商，请更改源码。此处用的是
+	<a href="http://www.ihuyi.com/product.php" target="_blank">http://www.ihuyi.com/product.php</a> 短信服务商</font>',
+	'setting_access_register_send_phoneauthcode_pwd' => '短信服务商的密码',
 	'setting_access_register_forge_email' => '取消注册邮箱必填',
 	'setting_access_register_forge_email_comment' => '开启后如果用户不填写注册邮箱，将自动生成一个随机邮箱地址',
-
-
+	'setting_access_register_send_note_txt'=> '短信模版',
+	'setting_access_register_send_note_txt_comment'=> '短信模版字数最好不要超过62个，请将 authstr 添加在短信模版要显示验证码的地方，如：您的验证码为，authstr，请不要把验证码泄露给其他人。',
+	//register
 	'setting_access_register_invite_buy' => '允许充值购买邀请码',
 	'setting_access_register_invite_buy_comment' => '允许游客通过在线充值购买注册邀请码。仅限于关闭普通注册时有效。开启前请确认您的<a href="'.ADMINSCRIPT.'?frames=yes&action=setting&operation=ec" target="_blank"><strong>电子商务</strong></a>及<a href="'.ADMINSCRIPT.'?frames=yes&action=setting&operation=mail" target="_blank"><strong>发送邮件</strong></a>功能可正常使用',
 	'setting_access_register_invite_buyprice' => '邀请码单价(元)',

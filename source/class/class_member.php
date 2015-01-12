@@ -360,6 +360,7 @@ class register_ctl {
 		$_GET['password'] = $_GET[''.$this->setting['reginput']['password']];
 		$_GET['password2'] = $_GET[''.$this->setting['reginput']['password2']];
 		$_GET['email'] = $_GET[''.$this->setting['reginput']['email']];
+		$_GET['phone'] = $_GET['phone'];
 
 		if($_G['uid']) {
 			$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
@@ -466,6 +467,7 @@ class register_ctl {
 				}
 			}
 		}
+		$sendauthcode = $this->setting['phoneauthcode'] ? true : false;
 		if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 			if($_GET['action'] == 'activation') {
@@ -546,6 +548,11 @@ class register_ctl {
 				}
 				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
 			}
+			//snedauthcode
+			if($sendauthcode){
+				
+			}
+
 			$emailstatus = 0;
 			if($this->setting['sendregisterurl'] && !$sendurl) {
 				$_GET['email'] = strtolower($hash[0]);

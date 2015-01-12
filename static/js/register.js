@@ -374,3 +374,19 @@ function checkinvite() {
 		errormessage('invitecode', s);
 	});
 }
+function sendauthorcode(){
+	errormessage('phone');
+	var phone=trim($('phone').value);
+	if(phone==''){
+		errormessage('phone', '请输入电话号码');
+		return;
+	}
+	if(!phone.match(/^1[358][0-9]{9}$/)){
+		errormessage('phone', '请输入真实的电话号码');
+		return;
+	}
+	var x = new Ajax();
+	x.get('forum.php?mod=ajax&inajax=yes&infloat=register&handlekey=register&ajaxmenu=1&action=sendauthstr&phone=' + phone, function(s) {
+		errormessage('phone', s);
+	});
+}

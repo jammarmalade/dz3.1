@@ -383,7 +383,7 @@ if(!submitcheck('settingsubmit')) {
 		}
 
 
-	} elseif($operation == 'access') {
+	} elseif($operation == 'access') {//register
 
 		$wmsgcheck = array($setting['welcomemsg'] =>'checked');
 		$setting['inviteconfig'] = dunserialize($setting['inviteconfig']);
@@ -439,6 +439,18 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_access_register_regclosemessage', 'settingnew[regclosemessage]', $setting['regclosemessage'], 'textarea');
 		showsetting('setting_access_register_name', 'settingnew[regname]', $setting['regname'], 'text');
 		showsetting('setting_access_register_send_register_url', 'settingnew[sendregisterurl]', $setting['sendregisterurl'], 'radio');
+		//add phone number register
+		$display=$setting['phoneauthcode'] ? $setting['phoneauthcode'] :0;
+		showsetting('setting_access_register_send_phoneauthcode', array('settingnew[phoneauthcode]', array(
+				array(1, $lang['yes'], array('phoneopen' => '')),
+				array(0, $lang['no'], array('phoneopen' => 'none'))
+			), TRUE),$display , 'mradio');
+		showtagheader('tbody', 'phoneopen',$display);
+		showsetting('setting_access_register_send_phoneauthcode_user', 'settingnew[phoneauthcode_user]', $setting['phoneauthcode_user'], 'text');
+		showsetting('setting_access_register_send_phoneauthcode_pwd', 'settingnew[phoneauthcode_pwd]',$setting['phoneauthcode_pwd'] , 'text');
+		showsetting('setting_access_register_send_note_txt', 'settingnew[note_txt]',$setting['note_txt'] , 'textarea');
+		showtagfooter('tbody');	
+
 		showsetting('setting_access_register_forge_email', 'settingnew[forgeemail]', $setting['forgeemail'], 'radio');
 		showsetting('setting_access_register_link_name', 'settingnew[reglinkname]', $setting['reglinkname'], 'text');
 		showsetting('setting_access_register_censoruser', 'settingnew[censoruser]', $setting['censoruser'], 'textarea');

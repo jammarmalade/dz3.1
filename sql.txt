@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS `pre_common_member_authphone`;
+CREATE TABLE `pre_common_member_authphone` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `phone` char(11) NOT NULL,
+  `authstr` varchar(20) NOT NULL,
+  `ip` varchar(20) NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `dateline` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE pre_ucenter_members ADD phone CHAR(11) NOT NULL DEFAULT '' AFTER `email`;
+ALTER TABLE pre_ucenter_members ADD INDEX phone(`phone`);
+ALTER TABLE pre_common_member ADD phone CHAR(11) NOT NULL DEFAULT '' AFTER `email`;

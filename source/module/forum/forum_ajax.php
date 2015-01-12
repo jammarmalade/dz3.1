@@ -66,6 +66,79 @@ if($_GET['action'] == 'checkusername') {
 		showmessage('wrong_invitation_code', '', array(), array('handle' => false));
 	}
 
+}  elseif($_GET['action'] == 'sendauthstr') {//ajax send phone authstr
+	$phone = trim($_GET['phone']);
+	if(!preg_match('/^1[358][0-9]{9}$/',trim($phone))){
+		$msg=lang('member/template', 'register_phone_failed');
+		showmessage($msg, '', array(), array('handle' => false));
+	}
+	if(DB::result_first('SELECT uid FROM %t WHERE '.DB::field("phone",$phone),array('ucenter_members'))){
+		$msg=lang('member/template', 'register_phone_exists');
+		showmessage($msg, '', array(), array('handle' => false));
+	}
+	$authinfo=DB::fetch_all("SELECT * FROM %t WHERE phone='%i' or ip='%i' ORDER BY dateline DESC",array('common_member_authphone',$phone,$_G['clientip']));
+	$authinfo_phone=$authinfo_ip=array();
+	foreach($authinfo as $k=>$v){
+		if($v['phone']==$phone){
+			$authinfo_phone[]=$v;
+		}
+		if($v['ip']==$_G['clientip']){
+			$authinfo_ip[]=$v;
+		}
+	}
+	//验证手机号
+	if($authinfo_phone){
+		if(count($authinfo_phone)>=5){
+			$msg=lang('member/template', 'register_authcode_send_dayup');
+			showmessage($msg, '', array(), array('handle' => false));
+		}else{
+			$cha = intval(TIMESTAMP) - intval($authinfo_phone[0]['dateline']);
+			if($cha<=60){
+				$msg=lang('member/template', 'register_authcode_send_limit');
+				showmessage($msg, '', array('cha' => 60-$cha), array('handle' => false));
+			}
+		}
+	}
+	//验证ip
+	if($authinfo_ip){
+		if(count($authinfo_ip)>=5){
+			$msg=lang('member/template', 'register_authcode_send_dayup');
+			showmessage($msg, '', array(), array('handle' => false));
+		}else{
+			$cha = intval(TIMESTAMP) - intval($authinfo_ip[0]['dateline']);
+			if($cha<=60){
+				$msg=lang('member/template', 'register_authcode_send_limit');
+				showmessage($msg, '', array('cha' => 60-$cha), array('handle' => false));
+			}
+		}
+	}
+	$target = "http://106.ihuyi.cn/webservice/sms.php?method=Submit";
+	$authstr=random(6,1);
+	$post_user=$_G['setting']['phoneauthcode_user'];
+	$post_pwd=$_G['setting']['phoneauthcode_pwd'];
+	if($_G['setting']['note_txt']){
+		$note_txt=$_G['setting']['note_txt'];
+	}else{
+		$note_txt=lang('member/template', 'note_txt');
+	}
+	$note_txt=str_replace('authstr',$authstr,$note_txt);
+	$post_data = 'account='.$post_user.'&password='.$post_pwd.'&mobile='.$phone.'&content='.rawurlencode($note_txt);
+//	$res =  xml_to_array(curl_phone($post_data, $target));
+	$res['SubmitResult']['code']=2;//测试
+	if($res['SubmitResult']['code']==2){
+		DB::insert('common_member_authphone',array(
+			'phone'=>$phone,
+			'authstr'=>$authstr,
+			'ip'=>$_G['clientip'],
+			'dateline'=>TIMESTAMP
+		));
+		$msg=lang('member/template', 'register_authcode_send_succeed');
+		showmessage($msg, '', array(), array('handle' => false));
+	}else{
+		$msg=lang('member/template', 'register_authcode_send_fialed');
+		showmessage($msg, '', array(), array('handle' => false));
+	}
+
 } elseif($_GET['action'] == 'checkuserexists') {
 
 	if(C::t('common_member')->fetch_by_username(trim($_GET['username'])) || C::t('common_member_archive')->fetch_by_username(trim($_GET['username']))) {

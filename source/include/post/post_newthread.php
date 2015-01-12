@@ -120,9 +120,12 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			$specialextra = '';
 		}
 	}
-
+	//根据ip获取城市
 	if($special == 4) {
-		$activity = array('starttimeto' => '', 'starttimefrom' => '', 'place' => '', 'class' => '', 'cost' => '', 'number' => '', 'gender' => '', 'expiration' => '');
+		$ak='lz3rVG3ds7rfYkTSbQbAHuKH';
+		$pre_url='http://api.map.baidu.com/location/ip?ak='.$ak;
+		$res=json_decode(myCurl($pre_url),true);
+		$activity = array('starttimeto' => '', 'starttimefrom' => '', 'place' => '', 'class' => '', 'cost' => '', 'number' => '', 'gender' => '', 'expiration' => '','city'=>$res['content']['address_detail']['city']);
 		$activitytypelist = $_G['setting']['activitytype'] ? explode("\n", trim($_G['setting']['activitytype'])) : '';
 	}
 
@@ -230,11 +233,6 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	$params['typeexpiration'] = $_GET['typeexpiration'];
 
-
-
-
-
-
 	$params['ordertype'] = $_GET['ordertype'];
 
 	$params['hiddenreplies'] = $_GET['hiddenreplies'];
@@ -274,19 +272,12 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 
 	$modthread->attach_before_methods('newthread', $bfmethods);
+
 	$modthread->attach_after_methods('newthread', $afmethods);
 
 	$return = $modthread->newthread($params);
 	$tid = $modthread->tid;
 	$pid = $modthread->pid;
-
-
-
-
-
-
-
-
 
 	dsetcookie('clearUserdata', 'forum');
 	if($specialextra) {
