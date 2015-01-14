@@ -132,6 +132,7 @@ if($_GET['action'] == 'checkusername') {
 			'ip'=>$_G['clientip'],
 			'dateline'=>TIMESTAMP
 		));
+		dsetcookie('phone',$phone,3600);
 		$msg=lang('member/template', 'register_authcode_send_succeed');
 		showmessage($msg, '', array(), array('handle' => false));
 	}else{

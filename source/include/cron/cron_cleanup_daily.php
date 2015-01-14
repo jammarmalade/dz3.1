@@ -19,6 +19,8 @@ if(C::t('common_advertisement')->close_endtime()) {
 	updatecache(array('setting', 'advs'));
 }
 C::t('forum_threaddisablepos')->truncate();
+//每日清理手机验证码记录
+DB::query("TRUNCATE pre_common_member_authphone");
 C::t('common_searchindex')->truncate();
 C::t('forum_threadmod')->delete_by_dateline($_G['timestamp']-31536000);
 C::t('forum_forumrecommend')->delete_old();

@@ -360,7 +360,8 @@ class register_ctl {
 		$_GET['password'] = $_GET[''.$this->setting['reginput']['password']];
 		$_GET['password2'] = $_GET[''.$this->setting['reginput']['password2']];
 		$_GET['email'] = $_GET[''.$this->setting['reginput']['email']];
-		$_GET['phone'] = $_GET['phone'];
+		$_GET['phone'] = trim($_GET['phone']);
+		$_GET['authstr'] = trim($_GET['authcode']);
 
 		if($_G['uid']) {
 			$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
@@ -468,6 +469,13 @@ class register_ctl {
 			}
 		}
 		$sendauthcode = $this->setting['phoneauthcode'] ? true : false;
+		if($_GET['phoneauth']){
+			$hash_phoneauth=authcode(urldecode($_GET['phoneauth']), 'DECODE', $_G['config']['security']['authkey']);
+			$cookide_authstr=getcookie('authstr');
+			if($hash_phoneauth==$cookide_authstr){
+				$sendauthcode==false;
+			}
+		}
 		if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 			if($_GET['action'] == 'activation') {
@@ -532,7 +540,7 @@ class register_ctl {
 				}
 				$sendurl = false;
 			}
-			if(!$activationauth && ($sendurl || !$_G['setting']['forgeemail'])) {
+			if(!$activationauth && ($sendurl || !$_G['setting']['forgeemail']) && !$sendauthcode) {
 				checkemail($_GET['email']);
 			}
 			if($sendurl) {
@@ -549,8 +557,35 @@ class register_ctl {
 				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
 			}
 			//snedauthcode
-			if($sendauthcode){
-				
+			if($sendauthcode && $_GET['authstr']){
+
+				if(!$_GET['authstr']){
+					$msg=lang('member/template', 'authcode_empty');
+					showmessage($msg, dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
+				}
+				$cookiePhone=getcookie('phone');
+				if($cookiePhone && $cookiePhone!=$_GET['phone']){
+					$_GET['phone']=$cookiePhone;
+				}
+				if(!preg_match('/^1[358][0-9]{9}$/',$_GET['phone'])){
+					$msg=lang('member/template', 'authcode_failed');
+					showmessage($msg, dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
+				}
+				$authinfo=DB::fetch_first("SELECT * FROM %t WHERE phone='%i' ORDER BY dateline DESC",array('common_member_authphone',$_GET['phone']));
+				if($authinfo && !$authinfo['status'] && ($authinfo['authstr']==$_GET['authstr'])){
+					if((TIMESTAMP-$authinfo['dateline']) > 600){//ten mins
+						$msg=lang('member/template', 'authcode_failed_expire');
+						showmessage($msg, dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
+					}
+					DB::update('common_member_authphone',array('status'=>1),'id='.$authinfo['id']);
+				}else{
+					$msg=lang('member/template', 'authcode_failed');
+					showmessage($msg, dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
+				}
+				dsetcookie('authstr',$_GET['authstr'],3600);
+				$hash_phoneauth=authcode($_GET['authstr'], 'ENCODE', $_G['config']['security']['authkey']);
+				dheader('Location: member.php?mod=register&phoneauth='.urlencode($hash_phoneauth));
+				exit();
 			}
 
 			$emailstatus = 0;

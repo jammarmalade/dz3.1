@@ -184,14 +184,10 @@ class member{
 			}
 		}else{//验证
 			$authinfo=DB::fetch_first("SELECT * FROM %t WHERE phone='%i' ORDER BY dateline DESC",array('common_member_authphone',$phoneN));
-			if($authinfo){
-				if($authinfo['status']){
-					$return['status']==ERROR_CODE;
-					$return['errormsg']='验证码错误';
-				}else{
-					if($authinfo['authstr']!=trim($_GET['authstr'])){
+			if($authinfo && !$authinfo['status'] && ($authinfo['authstr']==$_GET['authstr'])){
+					if((TIMESTAMP-$authinfo['dateline']) > 600){
 						$return['status']==ERROR_CODE;
-						$return['errormsg']='验证码错误';
+						$return['errormsg']='验证码已过期';
 					}else{
 						DB::update('common_member_authphone',array('status'=>1),'id='.$authinfo['id']);
 					}
