@@ -53,6 +53,7 @@ $lang = array (
   'register_phone_exists'=>'该手机号已被注册',
   'authcode_failed'=>'抱歉，验证失败',
   'authcode_failed_expire'=>'验证码已过期',
+  'authcode_successed'=>'验证成功，前往注册页面',
   'authcode_empty'=>'验证码不能为空',
   'register_authcode_send_dayup'=>'本日发送手机验证码次数已达上限',
   'register_authcode_send_limit'=>'{cha} 秒后才能再次发送',

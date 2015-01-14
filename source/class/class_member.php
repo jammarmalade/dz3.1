@@ -469,11 +469,13 @@ class register_ctl {
 			}
 		}
 		$sendauthcode = $this->setting['phoneauthcode'] ? true : false;
+		//若是验证跳转过来
 		if($_GET['phoneauth']){
-			$hash_phoneauth=authcode(urldecode($_GET['phoneauth']), 'DECODE', $_G['config']['security']['authkey']);
 			$cookide_authstr=getcookie('authstr');
+			$hash_phoneauth=urldecode($_GET['phoneauth']);
 			if($hash_phoneauth==$cookide_authstr){
-				$sendauthcode==false;
+				list($authcode,$phone)=explode('-',authcode($hash_phoneauth, 'DECODE', $_G['config']['security']['authkey']));
+				$sendauthcode=false;
 			}
 		}
 		if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
@@ -582,10 +584,11 @@ class register_ctl {
 					$msg=lang('member/template', 'authcode_failed');
 					showmessage($msg, dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
 				}
-				dsetcookie('authstr',$_GET['authstr'],3600);
-				$hash_phoneauth=authcode($_GET['authstr'], 'ENCODE', $_G['config']['security']['authkey']);
-				dheader('Location: member.php?mod=register&phoneauth='.urlencode($hash_phoneauth));
-				exit();
+				$hash_phoneauth=authcode($_GET['authstr'].'-'.$_GET['phone'], 'ENCODE', $_G['config']['security']['authkey']);
+				dsetcookie('authstr',$hash_phoneauth,3600);
+				$redirect=$_G['siteurl'].'member.php?mod=register&phoneauth='.urlencode($hash_phoneauth);
+				$msg=lang('member/template', 'authcode_successed');
+				showmessage($msg, $redirect, array('bbname' => $this->setting['bbname']), array('showdialog' => true, 'locationtime' => true,'location'=>true));
 			}
 
 			$emailstatus = 0;
@@ -758,6 +761,8 @@ class register_ctl {
 					} else {
 						showmessage('undefined_action');
 					}
+				}else{
+					DB::update('ucenter_members',array('phone'=>$phone),'uid='.$uid);
 				}
 			} else {
 				list($uid, $username, $email) = $activation;
@@ -821,7 +826,7 @@ class register_ctl {
 				$groupinfo['groupid'] = $this->setting['inviteconfig']['invitegroupid'];
 			}
 
-			$init_arr = array('credits' => explode(',', $this->setting['initcredits']), 'profile'=>$profile, 'emailstatus' => $emailstatus);
+			$init_arr = array('credits' => explode(',', $this->setting['initcredits']), 'profile'=>$profile, 'emailstatus' => $emailstatus,'phone'=>$phone);
 
 			C::t('common_member')->insert($uid, $username, $password, $email, $_G['clientip'], $groupinfo['groupid'], $init_arr);
 			if($emailstatus) {

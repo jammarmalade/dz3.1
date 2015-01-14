@@ -51,6 +51,10 @@
 			<!--{if $_G['setting']['sendregisterurl']}-->
 				<input type="hidden" name="hash" value="$_GET[hash]" />
 			<!--{/if}-->
+			<!--{if !$sendauthcode && $phone}-->
+				<input type="hidden" name="phone" value="$phone" />
+				<input type="hidden" name="phoneauth" value="$_GET['phoneauth']" />
+			<!--{/if}-->
 			<div class="mtw">
 				<div id="reginfo_a">
 					<!--{hook/register_top}-->

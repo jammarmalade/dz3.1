@@ -284,6 +284,7 @@ class table_common_member extends discuz_table_archive
 				'regdate' => TIMESTAMP,
 				'emailstatus' => intval($extdata['emailstatus']),
 				'credits' => dintval($credits[0]),
+				'phone'=>($extdata['phone'] ? $extdata['phone']: 0),
 				'timeoffset' => 9999
 			);
 			$status = array(
