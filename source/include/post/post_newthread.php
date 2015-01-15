@@ -122,10 +122,14 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 	//根据ip获取城市
 	if($special == 4) {
-		$ak='lz3rVG3ds7rfYkTSbQbAHuKH';
-		$pre_url='http://api.map.baidu.com/location/ip?ak='.$ak;
-		$res=json_decode(myCurl($pre_url),true);
-		$activity = array('starttimeto' => '', 'starttimefrom' => '', 'place' => '', 'class' => '', 'cost' => '', 'number' => '', 'gender' => '', 'expiration' => '','city'=>$res['content']['address_detail']['city']);
+		$lbs=dunserialize($_G['setting']['lbs']);
+		$city='';
+		if($lbs['open']){
+			$pre_url='http://api.map.baidu.com/location/ip?ak='.$lbs['ak'];
+			$res=json_decode(myCurl($pre_url),true);
+			$city=$res['content']['address_detail']['city'];
+		}
+		$activity = array('starttimeto' => '', 'starttimefrom' => '', 'place' => '', 'class' => '', 'cost' => '', 'number' => '', 'gender' => '', 'expiration' => '','city'=>$city);
 		$activitytypelist = $_G['setting']['activitytype'] ? explode("\n", trim($_G['setting']['activitytype'])) : '';
 	}
 

@@ -59,6 +59,7 @@ $menu['global'] = array(
 	array('menu_setting_ranklist', 'setting_ranklist'),
 	array('menu_setting_mobile', 'setting_mobile'),
 	array('menu_setting_antitheft', 'setting_antitheft'),
+	array('menu_setting_setLBS', 'setting_setLBS'),//LBS
 );
 
 $menu['style'] = array(

@@ -43,17 +43,20 @@ class extend_thread_activity extends extend_thread_base {
 		$this->activity['number'] = intval($_GET['activitynumber']);
 		//经纬度
 		$this->activity['lng']=$this->activity['lat']=$this->activity['sinlat']=$this->activity['coslat']=$this->activity['lngpi']=0;
-		$ak='lz3rVG3ds7rfYkTSbQbAHuKH';
-		$address=trim($_GET['activitycity']).$this->activity['place'];
-		$pre_url='http://api.map.baidu.com/geocoder/v2/?address='.$address.'&output=json&ak='.$ak;
-		$res=json_decode(myCurl($pre_url),true);
-		if($res['status']==0){
-			$this->activity['lng'] = $res['result']['location']['lng'];
-			$this->activity['lat'] = $res['result']['location']['lat'];
-			//空间换时间（数据库要存入这三个值）
-			$this->activity['sinlat']=sin(($this->activity['lat'] * 3.1415) / 180);
-			$this->activity['coslat']=cos(($this->activity['lat'] * 3.1415) / 180);
-			$this->activity['lngpi']=($this->activity['lng'] * 3.1415) / 180;
+		global $_G;
+		$lbs=dunserialize($_G['setting']['lbs']);
+		if($lbs['open']){
+			$address=trim($_GET['activitycity']).$this->activity['place'];
+			$pre_url='http://api.map.baidu.com/geocoder/v2/?address='.$address.'&output=json&ak='.$lbs['ak'];
+			$res=json_decode(myCurl($pre_url),true);
+			if($res['status']==0){
+				$this->activity['lng'] = $res['result']['location']['lng'];
+				$this->activity['lat'] = $res['result']['location']['lat'];
+				//空间换时间（数据库要存入这三个值）
+				$this->activity['sinlat']=sin(($this->activity['lat'] * 3.1415) / 180);
+				$this->activity['coslat']=cos(($this->activity['lat'] * 3.1415) / 180);
+				$this->activity['lngpi']=($this->activity['lng'] * 3.1415) / 180;
+			}	
 		}
 		//经纬度
 		if($_GET['activityexpiration']) {

@@ -91,4 +91,25 @@ $allapplynum = $applynumbers + $noverifiednum;
 if($_G['forum']['status'] == 3) {
 	$isgroupuser = groupperm($_G['forum'], $_G['uid']);
 }
+//show activity nearby
+$lbs=dunserialize($_G['setting']['lbs']);
+$activity_nearby=array();
+if($lbs['open']){
+	list($cachetime,$nearbytid)=explode('-',$activity['nearbytid']);
+	if($cachetime && ((TIMESTAMP-$cachetime) < 60)){
+		
+	}else{
+		if($activity['sinlat'] && $activity['coslat'] && $activity['lngpi']){
+			$distance=$lbs['nearby'];
+			$sinlat=$activity['sinlat'];
+			$coslat=$activity['coslat'];
+			$lngpi=$activity['lngpi'];
+			$sql="SELECT tid,place,(ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) AS distance FROM pre_forum_activity WHERE (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000)<=$distance ORDER BY (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) ASC LIMIT 0,5";
+		}
+	}
+	
+}
+echo "<pre>";
+print_r($activity);
+echo "</pre>";
 ?>

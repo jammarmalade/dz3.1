@@ -64,6 +64,7 @@ $lang = array
 	'menu_setting_mobile' => '手机版访问设置',
 	'menu_setting_tag' => '标签管理',
 	'menu_setting_antitheft' => '防采集设置',
+	'menu_setting_setLBS' => '基站定位LBS',//LBS
 
 	'menu_forums' => '版块管理',
 	'menu_forums_merge' => '版块合并',

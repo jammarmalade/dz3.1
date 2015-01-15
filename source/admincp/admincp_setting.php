@@ -2499,7 +2499,21 @@ EOT;
 			showsubmit('settingsubmit');
 		}
 		exit;
-
+	} elseif ($operation == 'setLBS'){//lbs
+		showtips('setting_lbs_tips');
+		showtableheader('setting_setLBS');
+		$lbs=dunserialize($_G['setting']['lbs']);
+		$display=$lbs['open'] ? $lbs['open'] : 0;
+		showsetting('setting_lbs_open', array('settingnew[lbs][open]', array(
+				array(1, $lang['yes'], array('lbsopen' => '')),
+				array(0, $lang['no'], array('lbsopen' => 'none'))
+			), TRUE),$display , 'mradio');
+		showtagheader('tbody', 'lbsopen',$display);
+		showsetting('setting_lbs_ak', 'settingnew[lbs][ak]', $lbs['ak'], 'text');
+		showsetting('setting_lbs_nearby', 'settingnew[lbs][nearby]', $lbs['nearby'], 'text');
+		showtagfooter('tbody');	
+		
+		showtablefooter();
 	} else {
 		if($operation == 'mail' || $operation == 'uc') {
 			cpmsg('founder_action');

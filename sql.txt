@@ -43,3 +43,6 @@ CREATE TABLE `pre_common_member_authphone` (
 ALTER TABLE pre_ucenter_members ADD phone CHAR(11) NOT NULL DEFAULT '' AFTER `email`;
 ALTER TABLE pre_ucenter_members ADD INDEX phone(`phone`);
 ALTER TABLE pre_common_member ADD phone CHAR(11) NOT NULL DEFAULT '' AFTER `email`;
+
+/*增加活动表 附近字段，用于缓存附近活动tid 2015-01-15 19:24:15*/
+ALTER TABLE pre_forum_activity ADD nearbytid TEXT NOT NULL DEFAULT '';

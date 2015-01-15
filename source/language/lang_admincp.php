@@ -2634,6 +2634,14 @@ $lang = array
 	'setting_antitheft_choose_optype' => '请指定要进行的操作',
 	'setting_antitheft_addwhitelist' => '加入白名单',
 	'setting_antitheft_addblacklist' => '加入黑名单',
+	//LBS
+	'setting_setLBS'=> '基站定位设置',
+	'setting_lbs_tips'=> '基于百度地图API的全球经纬度定位，根据IP获取定位城市，根据地点定位经纬度，百度地图显示，地图范围显示',
+	'setting_lbs_open'=>'开启该功能',
+	'setting_lbs_ak'=>'访问应用AK',
+	'setting_lbs_ak_comment'=>'<a href="http://lbsyun.baidu.com/apiconsole/key">前往此处</a>，创建应用(服务端)，并将<font color="red">访问应用（AK）</font>对应的AK填入此栏，若不填写此栏，则表示不启用此功能',
+	'setting_lbs_nearby'=>'附近距离',
+	'setting_lbs_nearby_comment'=>'附件活动查询距离，单位米，推荐设置 1000 ，表示查询附件1000米内的活动',
 
 	'setting_uc' => 'UCenter 设置',
 	'setting_uc_tips' => '<li>本设置在站点安装时自动生成，一般情况下请不要修改，修改前请备份 config/config_ucenter.php 文件，以防止修改错误导致站点无法运行</li>',
