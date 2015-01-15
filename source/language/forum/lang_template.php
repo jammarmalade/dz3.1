@@ -1312,6 +1312,8 @@ $lang = array (
   'hiderecover_tips' => '点击恢复主题隐藏状态',
   'hiderecover' => '恢复隐藏',
   'content_actions' => '更多操作',
+  'activity_count'=>'附近共有 $show_act[count] 个活动',
+  'activity_nearby'=>'离此活动 $tinfo[distance] 米',
 );
 
 ?>

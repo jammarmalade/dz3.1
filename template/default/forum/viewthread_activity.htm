@@ -88,7 +88,14 @@
 		<!--{/if}-->
 	</div>
 </div>
-
+<!--{if $show_act}-->
+<div class="act pbm cl">
+	<span>{lang activity_count}</span><br>
+	<!--{loop $show_act[list] $tinfo}-->
+		<span><a href="forum.php?mod=viewthread&tid=$tinfo[tid]">$tinfo['subject']</a><span>{lang activity_nearby}</span></span></br>
+	<!--{/loop}-->
+</div>
+<!--{/if}-->
 <table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">$post[message]</td></tr></table>
 
 

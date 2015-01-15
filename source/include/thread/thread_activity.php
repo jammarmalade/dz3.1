@@ -95,21 +95,46 @@ if($_G['forum']['status'] == 3) {
 $lbs=dunserialize($_G['setting']['lbs']);
 $activity_nearby=array();
 if($lbs['open']){
-	list($cachetime,$nearbytid)=explode('-',$activity['nearbytid']);
-	if($cachetime && ((TIMESTAMP-$cachetime) < 60)){
-		
+	$nearinfo=array();
+	if($activity['nearbytid']){
+		$nearinfo=dunserialize($activity['nearbytid']);
+	}
+	if($nearinfo && $nearinfo['time'] && ((TIMESTAMP-$nearinfo['time']) < 60)){
+		$show_act=$nearinfo;
 	}else{
 		if($activity['sinlat'] && $activity['coslat'] && $activity['lngpi']){
 			$distance=$lbs['nearby'];
 			$sinlat=$activity['sinlat'];
 			$coslat=$activity['coslat'];
 			$lngpi=$activity['lngpi'];
-			$sql="SELECT tid,place,(ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) AS distance FROM pre_forum_activity WHERE (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000)<=$distance ORDER BY (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) ASC LIMIT 0,5";
+			$sql="SELECT tid,place,(ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) AS distance FROM %t WHERE (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000)<=%d ORDER BY (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) ASC LIMIT 0,5";
+			if($near_act_info=DB::fetch_all($sql,array('forum_activity',$distance))){
+				foreach($near_act_info as $k=>$v){
+					if($v['tid']!=$activity['tid']){
+						$near_act[$v['tid']]=$v;
+						$tids[]=$v['tid'];
+					}
+				}
+				unset($near_act_info);
+				if($tids){
+					$threadinfo=DB::fetch_all("SELECT tid,subject FROM %t WHERE tid IN(%i)",array('forum_thread',join(',',$tids)));
+					foreach($threadinfo as $k=>$v){
+						$threadinfo_new[$v['tid']]=$v['subject'];
+					}
+					unset($threadinfo);
+					foreach($near_act as $k=>$v){
+						$near_act[$k]['subject']=$threadinfo_new[$v['tid']];
+						$near_act[$k]['distance']=ceil($v['distance']);
+					}
+					$show_act['list']=array_values($near_act);
+					$show_act['time']=TIMESTAMP;
+					$show_act['count']=count($near_act);
+					DB::update('forum_activity',array('nearbytid'=>serialize($show_act)),'tid='.$activity['tid']);
+				}
+			}
 		}
 	}
 	
 }
-echo "<pre>";
-print_r($activity);
-echo "</pre>";
+
 ?>
