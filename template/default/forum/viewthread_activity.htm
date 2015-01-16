@@ -26,7 +26,7 @@
 				<!--{/if}-->
 			</dd>
 			<dt>{lang activity_space}:</dt>
-			<dd>$activity[place]</dd>
+			<dd>$activity[place]  <a href="forum.php?mod=map&do=actview&tid={$_G[tid]}" target="_blank">{lang activity_check}</a></dd>
 			<dt>{lang gender}:</dt>
 			<dd>
 				<!--{if $activity['gender'] == 1}-->
@@ -92,7 +92,8 @@
 <div class="act pbm cl">
 	<span>{lang activity_count}</span><br>
 	<!--{loop $show_act[list] $tinfo}-->
-		<span><a href="forum.php?mod=viewthread&tid=$tinfo[tid]">$tinfo['subject']</a><span>{lang activity_nearby}</span></span></br>
+		<span><a href="forum.php?mod=viewthread&tid=$tinfo[tid]">$tinfo['subject']</a><span>{lang activity_nearby}  
+		<a href="forum.php?mod=map&do=actview&tid=$tinfo[tid]" target="_blank">{lang activity_check}</a></span></span></br>
 	<!--{/loop}-->
 </div>
 <!--{/if}-->

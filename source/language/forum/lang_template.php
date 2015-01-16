@@ -1314,6 +1314,10 @@ $lang = array (
   'content_actions' => '更多操作',
   'activity_count'=>'附近共有 $show_act[count] 个活动',
   'activity_nearby'=>'离此活动 $tinfo[distance] 米',
+  'activity_check'=>'查看位置',
+  'map_undefined_action'=>'未定义操作',
+  'map_not_activity'=>'该活动不存在',
+  'map_use'=>'地图使用方法：双击左键放大，双击右键缩小',
 );
 
 ?>

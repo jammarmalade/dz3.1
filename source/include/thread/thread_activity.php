@@ -107,7 +107,7 @@ if($lbs['open']){
 			$sinlat=$activity['sinlat'];
 			$coslat=$activity['coslat'];
 			$lngpi=$activity['lngpi'];
-			$sql="SELECT tid,place,(ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) AS distance FROM %t WHERE (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000)<=%d ORDER BY (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) ASC LIMIT 0,5";
+			$sql="SELECT tid,place,lng,lat,(ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) AS distance FROM %t WHERE (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000)<=%d ORDER BY (ACOS(sinlat * $sinlat +coslat * $coslat * COS(lngpi - $lngpi))* 6371 * 1000) ASC LIMIT 0,5";
 			if($near_act_info=DB::fetch_all($sql,array('forum_activity',$distance))){
 				foreach($near_act_info as $k=>$v){
 					if($v['tid']!=$activity['tid']){

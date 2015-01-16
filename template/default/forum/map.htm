@@ -1,0 +1,39 @@
+<!--{template common/header}-->
+<!--{if empty($_GET['infloat'])}-->
+<div id="pt" class="bm cl">
+	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
+</div>
+<div id="ct" class="wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+<!--{/if}-->
+<div>{lang map_use}</div>
+<div id="allmap" style="width:100%;height:500px;"></div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak={$lbs[ak]}"></script>
+<script type="text/javascript">
+	// 百度地图API功能
+	var sContent =
+	"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>$_G['forum_thread']['subject']</h4>" + 
+	"<div><img style='float:right;margin:4px' id='act_img' src='http://app.baidu.com/map/images/tiananmen.jpg' width='100' height='100' title='天安门'/>" + 
+	"<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>$activity['place'] [ $activity['class'] ]</p>" + 
+	"</div>";
+	var map = new BMap.Map("allmap");
+	var point = new BMap.Point($activity['lng'], $activity['lat']);
+	var marker = new BMap.Marker(point);
+	var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+	map.centerAndZoom(point, 15);
+	map.addOverlay(marker);
+	marker.addEventListener("click", function(){          
+	   this.openInfoWindow(infoWindow);
+	   //图片加载完毕重绘infowindow
+	   document.getElementById('act_img').onload = function (){
+		   infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+	   }
+	});
+</script>
+<!--{if empty($_GET['infloat'])}-->
+		</div>
+	</div>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->
