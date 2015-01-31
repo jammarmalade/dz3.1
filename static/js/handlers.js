@@ -217,6 +217,7 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 }
 
 function uploadSuccess(file, serverData) {
+	alert('111111111');
 	try {
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
 		if(this.customSettings.uploadSource == 'forum') {

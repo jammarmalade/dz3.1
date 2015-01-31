@@ -150,6 +150,17 @@ if($_GET['operation'] == 'upload') {
 	}
 
 
+} elseif($_GET['operation'] == 'dongpic') {
+
+	$showerror = true;
+//	require_once libfile('function/spacecp');
+	file_put_contents('d:/log.log',var_export($_FILES["Filedata"],true).' - 158'.PHP_EOL,FILE_APPEND);
+
+	if($showerror) {
+		echo "{\"picid\":\"0\", \"url\":\"0\", \"bigimg\":\"0\"}";
+	}
+
+
 } elseif($_GET['operation'] == 'portal') {
 
 	$aid = intval($_POST['aid']);

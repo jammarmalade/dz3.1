@@ -1307,6 +1307,30 @@ function uploadSuccess(file, serverData) {
 				showDialog('图片上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			}
 			$(file.id).style.display = 'none';
+		} else if(this.customSettings.uploadType == 'dongpic') {//dongpic
+			var data = eval('('+serverData+')');
+			if(parseInt(data.picid)) {
+				var newTr = document.createElement("TR");
+				var newTd = document.createElement("TD");
+				var img = new Image();
+				img.src = data.url;
+				var imgObj = document.createElement("img");
+				imgObj.src = img.src;
+				newTd.className = 'c';
+				newTd.appendChild(imgObj);
+				newTr.appendChild(newTd);
+				newTd = document.createElement("TD");
+				newTd.innerHTML = '<strong>'+file.name+'</strong>';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("TD");
+				newTd.className = 'd';
+				newTd.innerHTML = '图片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
+				newTr.appendChild(newTd);
+				this.customSettings.imgBoxObj.appendChild(newTr);
+			} else {
+				showDialog('图片上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+			}
+			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadType == 'blog') {
 			var data = eval('('+serverData+')');
 			if(parseInt(data.picid)) {

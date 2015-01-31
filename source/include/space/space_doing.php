@@ -163,6 +163,9 @@ if($space['username']) {
 }
 $metakeywords = $navtitle;
 $metadescription = $navtitle;
+require_once libfile('function/upload');
+$swfconfig = getuploadconfig($_G['uid']);
+
 include_once template('diy:home/space_doing');
 
 ?>

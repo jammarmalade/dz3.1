@@ -1,19 +1,19 @@
 <script type="text/javascript">
 var msgstr = '$defaultstr';
 function handlePrompt(type) {
-	var msgObj = $('message');
+	var msgObj = $('doingmessage');
 	if(type) {
 		if(msgObj.value == msgstr) {
 			msgObj.value = '';
 			msgObj.className = 'xg2';
 		}
-		if($('message_menu')) {
-			if($('message_menu').style.display == 'block') {
-				showFace('message', 'message', msgstr);
+		if($('doingmessage_menu')) {
+			if($('doingmessage_menu').style.display == 'block') {
+				showFace('doingmessage', 'doingmessage', msgstr);
 			}
 		}
 		if(BROWSER.firefox || BROWSER.chrome) {
-			showFace('message', 'message', msgstr);
+			showFace('doingmessage', 'doingmessage', msgstr);
 		}
 	} else {
 		if(msgObj.value == ''){
@@ -25,11 +25,62 @@ function handlePrompt(type) {
 </script>
 
 <div id="moodfm">
-	<form method="post" autocomplete="off" id="mood_addform" action="home.php?mod=spacecp&ac=doing&view=$_GET[view]" onsubmit="if($('message').value == msgstr){return false;}">
+	<form method="post" autocomplete="off" id="mood_addform" action="home.php?mod=spacecp&ac=doing&view=$_GET[view]" onsubmit="if($('doingmessage').value == msgstr){return false;}">
 		<table cellspacing="0" cellpadding="0">
 			<tr>
+				<td cols="2">
+					<div id="flw_bar" class="bar">
+						<!--{eval $seditor = array('doing', array('smilies', 'at'), 0, '<span id="spanButtonPlaceholder">{lang upload}</span>');}-->
+						<!--{subtemplate common/seditor}-->
+						<!--{subtemplate common/upload}-->
+						<div id="attachlist" class="fieldset flash cl"><span style="font-size:0"></span></div>
+						<script type="text/javascript">
+						var upload = new SWFUpload({
+							// Backend Settings
+							upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=dongpic",
+							post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
+
+							// File Upload Settings
+							file_size_limit : "$swfconfig[max]",	// 100MB
+							file_types : "$swfconfig[attachexts][ext]",
+							file_types_description : "$swfconfig[attachexts][depict]",
+							file_upload_limit : $swfconfig['limit'],
+							file_queue_limit : 0,
+							// Event Handler Settings (all my handlers are in the Handler.js file)
+							swfupload_preload_handler : preLoad,
+							swfupload_load_failed_handler : loadFailed,
+							file_dialog_start_handler : fileDialogStart,
+							file_queued_handler : fileQueued,
+							file_queue_error_handler : fileQueueError,
+							file_dialog_complete_handler : fileDialogComplete,
+							upload_start_handler : uploadStart,
+							upload_progress_handler : uploadProgress,
+							upload_error_handler : uploadError,
+							upload_success_handler : uploadSuccess,
+							upload_complete_handler : uploadComplete,
+							// Button Settings
+							button_image_url : "{IMGDIR}/flw_post_attach.png",
+							button_placeholder_id : "spanButtonPlaceholder",
+							button_width: 18,
+							button_height: 25,
+							button_cursor:SWFUpload.CURSOR.HAND,
+							button_window_mode: "transparent",
+							custom_settings : {
+								uploadSource: 'home',
+								uploadType: 'dongpic',
+								imgBoxObj: $('imglist')
+							},
+
+							// Debug Settings
+							debug: false
+						});
+					</script>
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<td id="mood_statusinput" class="moodfm_input">
-					<textarea name="message" id="message" class="xg1" onfocus="handlePrompt(1);" onclick="showFace(this.id, 'message', msgstr);" onblur="handlePrompt(0);" onkeyup="strLenCalc(this, 'maxlimit')" onkeydown="ctrlEnter(event, 'add');" rows="4">$defaultstr</textarea>
+					<textarea name="message" id="doingmessage" class="xg1" onfocus="handlePrompt(1);" onclick="showFace(this.id, 'doingmessage', msgstr);" onblur="handlePrompt(0);" onkeyup="strLenCalc(this, 'maxlimit')" onkeydown="ctrlEnter(event, 'add');" rows="4">$defaultstr</textarea>
 				</td>
 				<td class="moodfm_btn">
 					<button type="submit" name="add" id="add">{lang publish}</button>
@@ -46,6 +97,9 @@ function handlePrompt(type) {
 				<td></td>
 			</tr>
 		</table>
+		<div id="imglist">
+				saasdsadasdsadasdsd			
+		</div>
 		<input type="hidden" name="addsubmit" value="true" />
 		<input type="hidden" name="refer" value="$theurl" />
 		<input type="hidden" name="topicid" value="$topicid" />
